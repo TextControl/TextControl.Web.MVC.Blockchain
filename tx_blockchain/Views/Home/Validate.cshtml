@@ -1,0 +1,101 @@
+﻿@model tx_blockchain.Models.ValidationModel
+
+@{
+    ViewBag.Title = "Validate";
+    Layout = "~/Views/Shared/layout.cshtml";
+}
+
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-lg-6 text-center mb-5">
+
+                <i class="fas fa-fingerprint fa-9x mb-4"></i>
+                <h1>Validate Document</h1>
+
+            </div>
+            <div class="col-lg-6">
+
+                <div class="form-group">
+                    <label for="documentId">Unique Document ID</label>
+                    <input value="@Model.DocumentId" type="text" class="form-control" id="documentId" aria-describedby="uniqueDocumentIdHelp" placeholder="Enter unique document ID">
+                    <small id="uniqueDocumentIdHelp" class="form-text text-muted">This ID can be found in the upper left corner of your signed document.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="fileinput">Choose File</label><br />
+                    <input id="fileinput" type="file" aria-describedby="fileinputHelp" />
+                    <small id="fileinputHelp" class="form-text text-muted">Select the signed document from your local machine.</small>
+                </div>
+
+                <button onclick="validateDocument()" type="submit" class="btn btn-primary">Validate Document</button>
+
+            </div>
+        </div>
+
+        <div class="row mt-5 text-center">
+            <div class="col-lg-12">
+                <div class="result"></div>
+                <p id="result-text"></p>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+    var validationDocument;
+
+    function readDocument(input) {
+        if (input.files && input.files[0]) {
+            var fileReader = new FileReader();
+
+            fileReader.onload = function (e) {
+                validationDocument = e.target.result.split(',')[1];
+            };
+	
+	        // read the file and convert it to Base64
+	        fileReader.readAsDataURL(input.files[0]);
+	    }
+	}
+
+    $("#fileinput").change(function () {
+        readDocument(this);
+	});
+
+    function validateDocument() {
+        var serviceURL = "@Url.Action("ValidateDocument", "Document")";
+
+        // send document to controller
+        $.ajax({
+            type: "POST",
+            url: serviceURL,
+            data: {
+                Document: validationDocument,
+                UniqueId: $("#documentId").val()
+            },
+            success: successFunc,
+            error: errorFunc
+        });
+        }
+
+    function successFunc(data, status) {
+
+        $(".result").removeClass("verified");
+        $(".result").removeClass("notverified");
+        $("#result-text").removeClass("result-text-verified");
+        $("#result-text").removeClass("result-text-notverified");
+
+        if (data == "True") {
+            $(".result").addClass("verified");
+            $("#result-text").addClass("result-text-verified");
+        }
+        else {
+            $(".result").addClass("notverified");
+            $("#result-text").addClass("result-text-notverified");
+        }
+    }
+
+    function errorFunc() {
+        alert("Error");
+    }
+
+</script>

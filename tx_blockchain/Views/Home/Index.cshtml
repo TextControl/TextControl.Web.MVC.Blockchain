@@ -1,0 +1,23 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/layout.cshtml";
+}
+
+<div class="container">
+
+    <div class="row mt-5">
+        <div class="col-lg-6 text-center mb-5">
+            <i class="fas fa-signature fa-9x mb-4"></i>
+            <p>A random document can be electronically signed and stored on the blockchain.</p>
+            <a href="@Url.Action("Sign")" class="btn btn-outline-primary">Sign Document</a>
+        </div>
+        <div class="col-lg-6 text-center">
+            <i class="fas fa-fingerprint fa-9x mb-4"></i>
+            <p>An electronically signed document can be uploaded and validated against the blockchain.</p>
+            <a href="@Url.Action("Validate")" class="btn btn-outline-primary">Validate Document</a>
+        </div>
+    </div>
+
+</div>

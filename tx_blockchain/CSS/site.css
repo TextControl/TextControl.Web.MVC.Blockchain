@@ -1,0 +1,42 @@
+﻿.viewer {
+    height: calc(100vh - 56px);
+}
+
+.verified::before {
+    font-size: 100px;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f058";
+}
+
+.notverified::before {
+    font-size: 100px;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f057";
+}
+
+.result {
+    display: block;
+}
+
+.verified {
+    color: green; 
+}
+
+.notverified {
+    color: red;
+}
+
+.result-text-notverified::before {
+    content: "The document could not be validated with the last block on the blockchain.";
+}
+
+.result-text-verified::before {
+    content: "The document has been validated with the last block on the blockchain.";
+}
+
+#tx-documentViewer {
+    top: 56px !important;
+    height: calc(100vH - 56px) !important;
+}

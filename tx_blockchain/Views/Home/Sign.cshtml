@@ -1,0 +1,75 @@
+﻿@using TXTextControl.Web.MVC.DocumentViewer
+
+@{
+    ViewBag.Title = "Sign";
+    Layout = "~/Views/Shared/layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="col-12">
+
+        @Html.TXTextControl().DocumentViewer(settings =>
+        {
+            settings.Dock = DocumentViewerSettings.DockStyle.Window;
+            settings.DocumentPath = Server.MapPath("~/App_Data/nda.tx");
+            settings.SignatureSettings = new SignatureSettings()
+            {
+                ShowSignatureBar = true,
+                OwnerName = "Text Control Demo",
+                UniqueId = Guid.NewGuid().ToString()
+            };
+        }).Render()
+
+    </div>
+
+</div>
+
+<script>
+    // set the callback method after submit
+    TXDocumentViewer.setSubmitCallback(exportDocument);
+
+    function exportDocument(e) {
+
+        var serviceURL = "@Url.Action("StoreDocument", "Document")";
+
+        // send document to controller
+        $.ajax({
+            type: "POST",
+            url: serviceURL,
+            data: {
+                Document: e.Document,
+                UniqueId: e.UniqueId,
+                SignerName: e.SignerName
+            },
+            success: successFunc,
+            error: errorFunc
+        });
+    }
+
+    function successFunc(data, status) {
+
+        console.log(data);
+
+        // create temporary link to download document
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:application/octet-stream;base64,' + data.PDF);
+        element.setAttribute('download', data.DocumentId + ".pdf");
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        // simulate click
+        element.click();
+
+        // remove the link
+        document.body.removeChild(element);
+
+        window.location = "Validate?documentId=" + data.DocumentId;
+    }
+
+    function errorFunc() {
+        alert("Error");
+    }
+</script>
+
