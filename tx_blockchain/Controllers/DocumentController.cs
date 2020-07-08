@@ -61,6 +61,9 @@ namespace tx_blockchain.Controllers
             // add a new block to the blockchain and store the SignedDocument object
             bcDocument.AddBlock(new Block(DateTime.Now, null, JsonConvert.SerializeObject(document)));
 
+            if (System.IO.Directory.Exists(Server.MapPath("~/App_Data/Blockchains/")) == false)
+                System.IO.Directory.CreateDirectory(Server.MapPath("~/App_Data/Blockchains/"));
+
             // store the blockchain as a file
             System.IO.File.WriteAllText(
                 Server.MapPath("~/App_Data/Blockchains/" + UniqueId + ".bc"),

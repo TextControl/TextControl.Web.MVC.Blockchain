@@ -17,7 +17,11 @@
             {
                 ShowSignatureBar = true,
                 OwnerName = "Text Control Demo",
-                UniqueId = Guid.NewGuid().ToString()
+                UniqueId = Guid.NewGuid().ToString(),
+                SignatureBoxName = "txsign",
+                SignerInitials = "TT",
+                SignerName = "Tim Typer",
+                RedirectUrlAfterSignature = ""
             };
         }).Render()
 
@@ -31,6 +35,8 @@
 
     function exportDocument(e) {
 
+        console.log(e);
+
         var serviceURL = "@Url.Action("StoreDocument", "Document")";
 
         // send document to controller
@@ -38,9 +44,9 @@
             type: "POST",
             url: serviceURL,
             data: {
-                Document: e.Document,
-                UniqueId: e.UniqueId,
-                SignerName: e.SignerName
+                Document: e.document,
+                UniqueId: e.uniqueId,
+                SignerName: e.signerName
             },
             success: successFunc,
             error: errorFunc
