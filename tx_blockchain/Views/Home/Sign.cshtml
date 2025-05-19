@@ -18,7 +18,6 @@
                 ShowSignatureBar = true,
                 OwnerName = "Text Control Demo",
                 UniqueId = Guid.NewGuid().ToString(),
-                SignatureBoxName = "txsign",
                 SignerInitials = "TT",
                 SignerName = "Tim Typer",
                 RedirectUrlAfterSignature = ""
@@ -31,7 +30,7 @@
 
 <script>
     // set the callback method after submit
-    TXDocumentViewer.setSubmitCallback(exportDocument);
+    window.addEventListener("documentViewerLoaded", function () { TXDocumentViewer.setSubmitCallback(exportDocument) });
 
     function exportDocument(e) {
 
